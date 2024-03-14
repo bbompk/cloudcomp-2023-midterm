@@ -3,7 +3,7 @@ name: Auto create scripts.zip
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'scripts/**'
       - '.github/workflows/scripts-zipper.yml'
@@ -24,7 +24,7 @@ jobs:
           with:
             name: Scripts Zipper Bot
             commit_message: generated scripts.zip
-            target_branch: main
+            target_branch: master
             remote_repository: https://github.com/bbompk/cloudcomp-2023-midterm
             access_token: ${{ secrets.ACTIONS_AUTH_TOKEN }}
             force: 0
