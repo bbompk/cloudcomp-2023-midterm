@@ -1,0 +1,30 @@
+name: Update App Image Tag
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      
+jobs:
+    update_tag:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout repo
+          uses: actions/checkout@v4
+        - name: Update tag
+          run: |
+            sudo apt-get update
+            sudo apt-get install zip
+            zip -r scripts.zip scripts
+        - name: Commit and Push changes
+          uses: GuillaumeFalourd/git-commit-push@v1.3
+          with:
+            email: protengplus@gmail.com
+            name: Scripts Zipper Bot
+            commit_message: Updated App Tag in ${{ github.event.inputs.path }}
+            target_branch: main
+            remote_repository: https://github.com/bbompk/cloudcomp-2023-midterm
+            access_token: ${{ secrets.ACTIONS_AUTH_TOKEN }}
+            force: 0
