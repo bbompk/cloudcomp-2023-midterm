@@ -16,6 +16,7 @@ sudo systemctl restart apache2
 sudo python3 apache2_allow_override.py
 sudo a2enmod rewrite
 sudo systemctl restart apache2
+cp wp_config_edit.py /tmp/wp_config_edit.py
 cd /tmp
 curl -O https://wordpress.org/latest.tar.gz
 tar xzvf latest.tar.gz
@@ -26,8 +27,8 @@ sudo cp -a /tmp/wordpress/. /var/www/html
 sudo chown -R www-data:www-data /var/www/html
 sudo find /var/www/html/ -type d -exec chmod 750 {} \;
 sudo find /var/www/html/ -type f -exec chmod 640 {} \;
-sudo python3 ~/scripts/wp_config_edit.py $DB_HOST
+sudo python3 wp_config_edit.py $DB_HOST
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
-wp core install --url=$WP_PUBLIC_IP --title="CloudComp" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
+wp core install --allow-root --url=$WP_PUBLIC_IP --title="CloudComp" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
