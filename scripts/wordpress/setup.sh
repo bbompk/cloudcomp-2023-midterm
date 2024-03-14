@@ -27,4 +27,7 @@ sudo chown -R www-data:www-data /var/www/html
 sudo find /var/www/html/ -type d -exec chmod 750 {} \;
 sudo find /var/www/html/ -type f -exec chmod 640 {} \;
 sudo python3 ~/scripts/wp_config_edit.py $DB_HOST
-
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+chmod +x wp-cli.phar
+sudo mv wp-cli.phar /usr/local/bin/wp
+wp core install --url=$WP_PUBLIC_IP --title="CloudComp" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
