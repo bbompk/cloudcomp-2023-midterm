@@ -1,4 +1,10 @@
 #!/bin/bash
+git clone https://github.com/bbompk/cloudcomp-2023-midterm.git
+cd cloudcomp-2023-midterm/scripts/wordpress
+export DB_HOST=
+export WP_PUBLIC_IP=
+export WP_ADMIN_USER=admin
+export WP_ADMIN_PASS=admin
 
 # install php8.1 and apache2
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
@@ -31,4 +37,4 @@ sudo python3 wp_config_edit.py $DB_HOST
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
-wp core install --allow-root --url=$WP_PUBLIC_IP --title="CloudComp" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
+sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudComp" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
