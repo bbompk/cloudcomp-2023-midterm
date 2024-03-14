@@ -21,9 +21,8 @@ jobs:
         - name: Commit and Push changes
           uses: GuillaumeFalourd/git-commit-push@v1.3
           with:
-            email: protengplus@gmail.com
             name: Scripts Zipper Bot
-            commit_message: Updated App Tag in ${{ github.event.inputs.path }}
+            commit_message: generated scripts.zip
             target_branch: main
             remote_repository: https://github.com/bbompk/cloudcomp-2023-midterm
             access_token: ${{ secrets.ACTIONS_AUTH_TOKEN }}
