@@ -1,4 +1,4 @@
-name: Update App Image Tag
+name: Auto create scripts.zip
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'scripts/**'
+      - '.github/workflows/scripts-zipper.yml'
       
 jobs:
     update_tag:
