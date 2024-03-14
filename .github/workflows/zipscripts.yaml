@@ -9,7 +9,7 @@ on:
       - '.github/workflows/zipscripts.yaml'
       
 jobs:
-    update_tag:
+    gnerate_scripts_zip:
         runs-on: ubuntu-latest
         steps:
         - name: Checkout repo
@@ -22,6 +22,7 @@ jobs:
         - name: Commit and Push changes
           uses: GuillaumeFalourd/git-commit-push@v1.3
           with:
+            email: scriptszipper@gmail.com
             name: Scripts Zipper Bot
             commit_message: generated scripts.zip
             target_branch: master
