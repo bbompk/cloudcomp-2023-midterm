@@ -6,7 +6,7 @@ on:
       - master
     paths:
       - 'scripts/**'
-      - '.github/workflows/scripts-zipper.yml'
+      - '.github/workflows/zip-scripts.yaml'
       
 jobs:
     update_tag:
