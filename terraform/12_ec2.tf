@@ -40,7 +40,7 @@ resource "aws_network_interface_attachment" "db_attachment" {
 }
 
 resource "aws_instance" "wp_server" {
-    depends_on = [ aws_instnace.db, aws_network_inetrface_attachment.db_attachment ]
+    depends_on = [ aws_instance.db, aws_network_inetrface_attachment.db_attachment ]
 
     ami = var.ami
     instance_type = "t2.micro"
