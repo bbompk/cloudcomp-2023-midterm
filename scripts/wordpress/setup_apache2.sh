@@ -2,9 +2,16 @@
 git clone https://github.com/bbompk/cloudcomp-2023-midterm.git
 cd cloudcomp-2023-midterm/scripts/wordpress
 export DB_HOST=
+export DB_NAME=wordpress-db
+export DB_USER=wordpress-user
+export DB_PASS=admin
 export WP_PUBLIC_IP=
 export WP_ADMIN_USER=admin
 export WP_ADMIN_PASS=admin
+export IAM_S3_ACCESS_KEY=
+export IAM_S3_SECRET_KEY=
+export BUCKET_NAME=
+export REGION=
 
 # install php8.1 and apache2
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
@@ -23,6 +30,7 @@ sudo python3 apache2_allow_override.py
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 cp wp_config_edit.py /tmp/wp_config_edit.py
+cp inject_wpo_const.py /tmp/inject_wpo_const.py
 cd /tmp
 curl -O https://wordpress.org/latest.tar.gz
 tar xzvf latest.tar.gz
@@ -33,10 +41,14 @@ sudo cp -a /tmp/wordpress/. /var/www/html
 sudo chown -R www-data:www-data /var/www/html
 sudo find /var/www/html/ -type d -exec chmod 750 {} \;
 sudo find /var/www/html/ -type f -exec chmod 640 {} \;
-sudo python3 wp_config_edit.py $DB_HOST
+sudo python3 wp_config_edit.py $DB_HOST $DB_NAME $DB_USER $DB_PASS
+sudo python3 inject_wpo_const.py $IAM_S3_ACCESS_KEY $IAM_S3_SECRET_KEY $BUCKET_NAME $REGION
+sudo systemctl restart apache2
 
 # install wordpress with wp-cli
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
-sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudComp" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
+sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudCompMidterm" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
+sudo wp plugin install amazon-s3-and-cloudfront --path=/var/www/html --allow-root --activate
+sudo systemctl restart apache2

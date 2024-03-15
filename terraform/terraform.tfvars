@@ -1,7 +1,7 @@
 region            = "us-east-1"
 availability_zone = "us-east-1a"
 ami               = "ami-07d9b9ddc6cd8dd30"
-bucket_name       = "safetydolphinwalrus010"
+bucket_name       = "safetydolphinwalrus6330301321"
 database_name     = "wordpress-db"
 database_user     = "wordpress-user"
 database_pass     = "admin"

@@ -40,7 +40,7 @@ resource "aws_network_interface_attachment" "db_from_wp" {
 }
 
 resource "aws_instance" "wp_server" {
-    depends_on = [ aws_instance.db, aws_network_interface_attachment.db_from_wp ]
+    depends_on = [ aws_instance.db, aws_network_interface_attachment.db_from_wp, aws_iam_access_key.s3_user ]
 
     ami = var.ami
     instance_type = "t2.micro"
@@ -53,14 +53,19 @@ resource "aws_instance" "wp_server" {
 
     user_data = <<-EOF
                 #!/bin/bash
-                #!/bin/bash
                 git clone https://github.com/bbompk/cloudcomp-2023-midterm.git
                 cd cloudcomp-2023-midterm/scripts/wordpress
                 export DB_HOST=${aws_instance.db.private_ip}
+                export DB_NAME=${var.database_name}
+                export DB_USER=${var.database_user}
+                export DB_PASS=${var.database_pass}
                 export WP_PUBLIC_IP=${aws_eip.wp_server.public_ip}
                 export WP_ADMIN_USER=${var.admin_user}
                 export WP_ADMIN_PASS=${var.admin_pass}
-                echo "$DB_HOST $WP_PUBLIC_IP $WP_ADMIN_USER $WP_ADMIN_PASS"
+                export IAM_S3_ACCESS_KEY=${aws_iam_access_key.s3_user.id}
+                export IAM_S3_SECRET_KEY=${aws_iam_access_key.s3_user.secret}
+                export BUCKET_NAME=${var.bucket_name}
+                export REGION=${var.region}
 
                 # install php8.1 and apache2
                 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
@@ -79,6 +84,7 @@ resource "aws_instance" "wp_server" {
                 sudo a2enmod rewrite
                 sudo systemctl restart apache2
                 cp wp_config_edit.py /tmp/wp_config_edit.py
+                cp inject_wpo_const.py /tmp/inject_wpo_const.py
                 cd /tmp
                 curl -O https://wordpress.org/latest.tar.gz
                 tar xzvf latest.tar.gz
@@ -89,11 +95,17 @@ resource "aws_instance" "wp_server" {
                 sudo chown -R www-data:www-data /var/www/html
                 sudo find /var/www/html/ -type d -exec chmod 750 {} \;
                 sudo find /var/www/html/ -type f -exec chmod 640 {} \;
-                sudo python3 wp_config_edit.py $DB_HOST
+                sudo python3 wp_config_edit.py $DB_HOST $DB_NAME $DB_USER $DB_PASS
+                sudo python3 inject_wpo_const.py $IAM_S3_ACCESS_KEY $IAM_S3_SECRET_KEY $BUCKET_NAME $REGION
+                sudo systemctl restart apache2
+
+                # install wordpress with wp-cli
                 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
                 chmod +x wp-cli.phar
                 sudo mv wp-cli.phar /usr/local/bin/wp
                 sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudCompMidterm" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
+                sudo wp plugin install amazon-s3-and-cloudfront --path=/var/www/html --allow-root --activate
+                sudo systemctl restart apache2
                 EOF
     tags = {
         Name = "cc-midterm-wp"
