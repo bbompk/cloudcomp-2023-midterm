@@ -87,7 +87,7 @@ resource "aws_instance" "wp_server" {
                 cp inject_wpo_const.py /tmp/inject_wpo_const.py
                 cd /tmp
                 curl -O https://wordpress.org/latest.tar.gz
-                tar xzvf latest.tar.gz
+                tar xzf latest.tar.gz
                 touch /tmp/wordpress/.htaccess
                 cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
                 mkdir /tmp/wordpress/wp-content/upgrade
@@ -98,6 +98,8 @@ resource "aws_instance" "wp_server" {
                 sudo python3 wp_config_edit.py $DB_HOST $DB_NAME $DB_USER $DB_PASS
                 sudo python3 inject_wpo_const.py $IAM_S3_ACCESS_KEY $IAM_S3_SECRET_KEY $BUCKET_NAME $REGION
                 sudo systemctl restart apache2
+                ping -c 5 -W 45 $DB_HOST
+                ping -c 5 -W 45 $DB_HOST
 
                 # install wordpress with wp-cli
                 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
