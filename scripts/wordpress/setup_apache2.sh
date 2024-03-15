@@ -34,6 +34,8 @@ sudo chown -R www-data:www-data /var/www/html
 sudo find /var/www/html/ -type d -exec chmod 750 {} \;
 sudo find /var/www/html/ -type f -exec chmod 640 {} \;
 sudo python3 wp_config_edit.py $DB_HOST
+
+# install wordpress with wp-cli
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp

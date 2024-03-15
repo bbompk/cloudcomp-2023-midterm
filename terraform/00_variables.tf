@@ -1,44 +1,44 @@
 variable "region" {
     type = string
-    description = "The AWS region to deploy to"
+    description = "Deployment AWS Region"
 }
 
 variable "availability_zone" {
     type = string
-    description = "The AWS availability zone to deploy to"
+    description = "Deployment AWS Availability Zone"
 }
 
 variable "ami" {
     type = string
-    description = "The AMI to use for the EC2 instance"
+    description = "AMI for EC2 instances"
 }
 
 variable "bucket_name" {
     type = string
-    description = "The name of the S3 bucket to create"
+    description = "S3 bucket for Wordpress"
 }
 
 variable "database_name" {
     type = string
-    description = "The name of the RDS database to create"
+    description = "Wordpress DB name"
 }
 
 variable "database_user" {
     type = string
-    description = "The username for the RDS database"
+    description = "Wordpress DB user"
 }
 
 variable "database_pass" {
     type = string
-    description = "The password for the RDS database"
+    description = "Wordpress DB password"
 }
 
 variable "admin_user" {
     type = string
-    description = "The username for the EC2 instance"
+    description = "Wordpress admin username"
 }
 
 variable "admin_pass" {
     type = string
-    description = "The password for the EC2 instance"
+    description = "Wordpress admin password"
 }
