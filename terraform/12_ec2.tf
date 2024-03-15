@@ -33,14 +33,14 @@ resource "aws_instance" "db" {
 
 }
 
-resource "aws_network_interface_attachment" "db_attachment" {
+resource "aws_network_interface_attachment" "db_from_wp" {
     device_index = 1
     instance_id = aws_instance.db.id
     network_interface_id = aws_network_interface.db_from_wp.id
 }
 
 resource "aws_instance" "wp_server" {
-    depends_on = [ aws_instance.db, aws_network_inetrface_attachment.db_attachment ]
+    depends_on = [ aws_instance.db, aws_network_interface_attachment.db_from_wp ]
 
     ami = var.ami
     instance_type = "t2.micro"
@@ -99,7 +99,7 @@ resource "aws_instance" "wp_server" {
     }
 }
 
-resource "aws_network_interface_attachment" "wp_attachment" {
+resource "aws_network_interface_attachment" "wp_to_db" {
     device_index = 1
     instance_id = aws_instance.wp_server.id
     network_interface_id = aws_network_interface.wp_to_db.id
