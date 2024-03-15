@@ -1,14 +1,10 @@
-resource "aws_elastic_ip" "nat" {
-  vpc = true
-
+resource "aws_eip" "nat" {
   tags = {
     Name = "cc-midterm-nat-eip"
   }
 }
 
-resource "aws_elastic_ip" "wp_server" {
-  vpc = true
-
+resource "aws_eip" "wp_server" {
   tags = {
     Name = "cc-midterm-wordpress-eip"
   }
