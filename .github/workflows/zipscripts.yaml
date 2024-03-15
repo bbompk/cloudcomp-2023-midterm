@@ -3,7 +3,7 @@ name: Auto create scripts.zip
 on:
   push:
     branches:
-      - test
+      - master
     paths:
       - 'scripts/**'
       - '.github/workflows/zipscripts.yaml'
