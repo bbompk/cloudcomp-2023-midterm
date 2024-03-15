@@ -21,7 +21,7 @@ resource "aws_instance" "db" {
                 sudo apt install -y mariadb-server
                 sudo systemctl start mariadb
                 sudo systemctl enable mariadb
-                python3 gen_setup_sql.py $DB_NAME $DB_USER $DB_PASS
+                python3 gen_setup_sql.py -n $DB_NAME -u $DB_USER -p $DB_PASS
                 sudo mysql -u root < mariadb_wp_setup.sql
                 sudo python3 mariadb_binding_addr.py
                 sudo systemctl restart mariadb
