@@ -1,7 +1,7 @@
 resource "aws_instance" "db" {
     ami = var.ami
     instance_type = "t2.micro"
-    subnet_id = aws_subnet.private_wp_db.id
+    availability_zone = var.availability_zone
     
     network_interface {
         device_index = 0
@@ -44,8 +44,8 @@ resource "aws_instance" "wp_server" {
 
     ami = var.ami
     instance_type = "t2.micro"
-    subnet_id = aws_subnet.public_wp.id
-    
+    availability_zone = var.availability_zone
+
     network_interface {
         device_index = 0
         network_interface_id = aws_network_interface.wp_internet.id
