@@ -2,7 +2,6 @@ resource "aws_instnace" "db" {
     ami = var.ami
     instance_type = "t2.micro"
     subnet_id = aws_subnet.private_wp_db.id
-    key_name = "cc-keypair-usne1"
     
     network_interface {
         device_index = 0
@@ -46,7 +45,6 @@ resource "aws_instance" "wp_server" {
     ami = var.ami
     instance_type = "t2.micro"
     subnet_id = aws_subnet.public_wp.id
-    key_name = "cc-keypair-usne1"
     
     network_interface {
         device_index = 0
