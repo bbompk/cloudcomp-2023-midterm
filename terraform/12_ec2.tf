@@ -1,4 +1,4 @@
-resource "aws_instnace" "db" {
+resource "aws_instance" "db" {
     ami = var.ami
     instance_type = "t2.micro"
     subnet_id = aws_subnet.private_wp_db.id
