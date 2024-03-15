@@ -10,9 +10,9 @@ export WP_ADMIN_PASS=admin
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 sudo apt update
 DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1
-DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-soap php8.1-intl php8.1-zip php8.1-mysql libapache2-mod-php
+DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-soap php8.1-intl php8.1-zip php8.1-mysql php8.1-fpm libapache2-mod-php
 sudo systemctl enable php8.1-fpm
-suso systemctl start php8.1-fpm
+sudo systemctl start php8.1-fpm
 
 # install nginx
 sudo systemctl stop apache2
