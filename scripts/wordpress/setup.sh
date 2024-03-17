@@ -20,8 +20,8 @@ sudo apt install -y apache2
 DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1
 DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-soap php8.1-intl php8.1-zip php8.1-mysql libapache2-mod-php
 sudo systemctl enable php8.1-fpm
-suso systemctl start php8.1-fpm
-suso systemctl restart apache2
+sudo systemctl start php8.1-fpm
+sudo systemctl restart apache2
 sudo python3 edit_apache2_dir.py
 sudo systemctl restart apache2
 

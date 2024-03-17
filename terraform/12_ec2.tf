@@ -74,8 +74,8 @@ resource "aws_instance" "wp_server" {
                 DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1
                 DEBIAN_FRONTEND=noninteractive sudo apt install -y php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-soap php8.1-intl php8.1-zip php8.1-mysql libapache2-mod-php
                 sudo systemctl enable php8.1-fpm
-                suso systemctl start php8.1-fpm
-                suso systemctl restart apache2
+                sudo systemctl start php8.1-fpm
+                sudo systemctl restart apache2
                 sudo python3 edit_apache2_dir.py
                 sudo systemctl restart apache2
 
@@ -105,6 +105,9 @@ resource "aws_instance" "wp_server" {
                 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
                 chmod +x wp-cli.phar
                 sudo mv wp-cli.phar /usr/local/bin/wp
+                sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudCompMidterm" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
+                sleep 10
+                curl localhost > /dev/null
                 sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudCompMidterm" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
                 sudo wp plugin install amazon-s3-and-cloudfront --path=/var/www/html --allow-root --activate
                 sudo systemctl restart apache2
