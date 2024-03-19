@@ -59,7 +59,7 @@ resource "aws_instance" "wp_server" {
                 #!/bin/bash
                 git clone https://github.com/bbompk/cloudcomp-2023-midterm.git
                 cd cloudcomp-2023-midterm/scripts/wordpress
-                export DB_HOST=${aws_instance.db.private_ip}
+                export DB_HOST=${aws_network_interface.db_from_wp.private_ip}
                 export DB_NAME=${var.database_name}
                 export DB_USER=${var.database_user}
                 export DB_PASS=${var.database_pass}
