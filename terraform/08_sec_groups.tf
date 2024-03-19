@@ -63,7 +63,8 @@ resource "aws_security_group" "wp_server" {
 resource "aws_security_group" "wp_db" {
     name = "cc-midterm-wordpress-db-sg"
     description = "Allow inbound traffic to database server from WordPress server"
-
+    vpc_id      = aws_vpc.main.id
+    
     egress {
         from_port   = 0
         to_port     = 0
