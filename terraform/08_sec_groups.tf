@@ -60,6 +60,22 @@ resource "aws_security_group" "wp_server" {
     }
 }
 
+resource "aws_security_group" "wp_db" {
+    name = "cc-midterm-wordpress-db-sg"
+    description = "Allow inbound traffic to database server from WordPress server"
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name = "cc-midterm-wp-db-sg"
+    }
+}  
+
 resource "aws_security_group" "db_server" {
     name        = "cc-midterm-db-sg"
     description = "Allow inbound traffic to database server only from WordPress server"
@@ -69,21 +85,21 @@ resource "aws_security_group" "db_server" {
         from_port   = 3306
         to_port     = 3306
         protocol    = "tcp"
-        security_groups = [aws_security_group.wp_server.id]
+        security_groups = [aws_security_group.wp_db.id]
     }
 
     ingress {
         from_port   = 22
         to_port     = 22
         protocol    = "tcp"
-        security_groups = [aws_security_group.wp_server.id]
+        security_groups = [aws_security_group.wp_db.id]
     }
 
     ingress {
         from_port = -1
         to_port = -1
         protocol = "icmp"
-        security_groups = [aws_security_group.wp_server.id]
+        security_groups = [aws_security_group.wp_db.id]
     }
 
     egress {

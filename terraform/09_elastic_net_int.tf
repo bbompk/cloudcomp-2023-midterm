@@ -16,7 +16,7 @@ resource "aws_eip_association" "wp_eip" {
 resource "aws_network_interface" "wp_to_db" {
     subnet_id   = aws_subnet.private_wp_db.id
 
-    security_groups = [aws_security_group.default.id]
+    security_groups = [aws_security_group.wp_db.id]
 
     tags = {
         Name = "cc-midterm-wp-to-db-eni"
