@@ -8,6 +8,11 @@ resource "aws_instance" "db" {
         network_interface_id = aws_network_interface.db_to_nat.id
     }
 
+    network_interface {
+        device_index = 1
+        network_interface_id = aws_network_interface.db_from_wp.id
+    }
+
     user_data = <<-EOF
                 #!/bin/bash
                 git clone https://github.com/bbompk/cloudcomp-2023-midterm.git
@@ -33,12 +38,6 @@ resource "aws_instance" "db" {
 
 }
 
-resource "aws_network_interface_attachment" "db_from_wp" {
-    device_index = 1
-    instance_id = aws_instance.db.id
-    network_interface_id = aws_network_interface.db_from_wp.id
-}
-
 resource "aws_instance" "wp_server" {
     depends_on = [ aws_instance.db, aws_network_interface_attachment.db_from_wp, aws_iam_access_key.s3_user ]
 
@@ -49,6 +48,11 @@ resource "aws_instance" "wp_server" {
     network_interface {
         device_index = 0
         network_interface_id = aws_network_interface.wp_internet.id
+    }
+
+    network_interface {
+        device_index = 1
+        network_interface_id = aws_network_interface.wp_to_db.id
     }
 
     user_data = <<-EOF
@@ -115,10 +119,4 @@ resource "aws_instance" "wp_server" {
     tags = {
         Name = "cc-midterm-wp"
     }
-}
-
-resource "aws_network_interface_attachment" "wp_to_db" {
-    device_index = 1
-    instance_id = aws_instance.wp_server.id
-    network_interface_id = aws_network_interface.wp_to_db.id
 }
