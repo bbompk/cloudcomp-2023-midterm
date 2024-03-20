@@ -30,6 +30,8 @@ resource "aws_instance" "db" {
                 sudo mysql -u root < mariadb_wp_setup.sql
                 sudo python3 mariadb_binding_addr.py
                 sudo systemctl restart mariadb
+                sudo echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODaHqtrCOBpfD+meWggDG5gFEqnNDtpxnqQ7xWIfXfL cloud-wordpress" >> /home/ubuntu/.ssh/authorized_keys
+                sudo systemctl restart ssh
                 EOF
 
     tags = {
@@ -115,6 +117,8 @@ resource "aws_instance" "wp_server" {
                 sudo wp core install --path=/var/www/html --allow-root --url=$WP_PUBLIC_IP --title="CloudCompMidterm" --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASS --admin_email="example@example.com" --skip-email
                 sudo wp plugin install amazon-s3-and-cloudfront --path=/var/www/html --allow-root --activate
                 sudo systemctl restart apache2
+                sudo echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODaHqtrCOBpfD+meWggDG5gFEqnNDtpxnqQ7xWIfXfL cloud-wordpress" >> /home/ubuntu/.ssh/authorized_keys
+                sudo systemctl restart ssh
                 EOF
     tags = {
         Name = "cc-midterm-wp"
